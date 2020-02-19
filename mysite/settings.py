@@ -79,12 +79,27 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# lokalna baza 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
+# postgres "produkciona" baza
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
     }
 }
+
+# ovo dtri linije povezuju lokalnu i heroku bazu tako da sve što se uradi u jednoj imamo u drugoj bazi.
+# hardkodiranu adresu heroku baze potrebno je dnveno ažurirati jer se stalno menja, ako želimo da su baze povezane
+# ako ne želimo vezu između baza brišemo ove tri linije
+DATABASES['default'] = dj_database_url.config(default ='postgres://rkoherdtkfkhqw:77d419abb464bb3d975f3671b2113f7412ab931e014e33dce969c3086098facf@ec2-54-197-34-207.compute-1.amazonaws.com:5432/d822p740ufaunl')
+
+db_form_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_form_env) 
 
 
 # Password validation
